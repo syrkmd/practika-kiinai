@@ -7,6 +7,7 @@ import com.yvl.vorstu.services.StudentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +22,11 @@ public class StudentController {
     private final StudentService service;
 
     @GetMapping
-    public Page<StudentResponse> getStudents(Pageable pageable) {
-        return service.getStudents(pageable);
+    public Page<StudentResponse> getStudents(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return service.getStudents(PageRequest.of(page, size));
     }
 
     @GetMapping("/{id}")

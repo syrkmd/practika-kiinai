@@ -1,9 +1,15 @@
 package com.yvl.vorstu.services;
 
+import com.yvl.vorstu.dto.student.request.CreateStudentRequest;
+import com.yvl.vorstu.dto.student.request.UpdateStudentRequest;
+import com.yvl.vorstu.dto.student.response.StudentResponse;
 import com.yvl.vorstu.entities.Student;
 import com.yvl.vorstu.exception.StudentNotFoundException;
+import com.yvl.vorstu.mapper.StudentMapper;
 import com.yvl.vorstu.repositories.StudentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,32 +19,37 @@ import java.util.List;
 public class StudentService {
 
     private final StudentRepository repository;
+    private final StudentMapper mapper;
 
-    public List<Student> getAllStudents() {
-        return repository.findAll();
+    public Page<StudentResponse> getStudents(Pageable pageable) {
+        return repository.findAll(pageable)
+                .map(mapper::toResponse);
     }
 
-    public Student getStudentById(Long id) {
-        return findStudent(id);
+    public StudentResponse getStudentById(Long id) {
+        return mapper.toResponse(findStudent(id));
     }
 
-    public List<Student> getStudentsByGroup(String group) {
-        return repository.getByGroup(group);
+    public List<StudentResponse> getStudentsByGroup(String group) {
+        return mapper.toResponseList(repository.getByGroup(group));
     }
 
-    public Student createStudent(Student student) {
-        student.setId(null);
-        return repository.save(student);
+    public StudentResponse createStudent(CreateStudentRequest request) {
+        Student student = mapper.toEntity(request);
+
+        Student saved = repository.save(student);
+
+        return mapper.toResponse(saved);
     }
 
-    public Student updateStudent(Long id, Student student) {
-        Student s = findStudent(id);
+    public StudentResponse updateStudent(Long id, UpdateStudentRequest request) {
+        Student student = findStudent(id);
 
-        s.setFio(student.getFio());
-        s.setGroup(student.getGroup());
-        s.setPhoneNumber(student.getPhoneNumber());
+        mapper.updateEntity(student, request);
 
-        return repository.save(s);
+        Student saved = repository.save(student);
+
+        return mapper.toResponse(saved);
     }
 
     public void deleteStudentById(Long id) {

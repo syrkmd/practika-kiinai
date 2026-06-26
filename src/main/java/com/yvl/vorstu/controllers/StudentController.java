@@ -37,8 +37,10 @@ public class StudentController {
     }
 
     @GetMapping("/group")
-    public List<StudentResponse> getStudentByGroup(@RequestParam String group) {
-        return service.getStudentsByGroup(group);
+    public Page<StudentResponse> getStudentByGroup(@RequestParam(defaultValue = "0") int page,
+                                                   @RequestParam(defaultValue = "10") int size,
+                                                   @RequestParam String group) {
+        return service.getStudentsByGroup(PageRequest.of(page, size), group);
     }
 
     @PostMapping

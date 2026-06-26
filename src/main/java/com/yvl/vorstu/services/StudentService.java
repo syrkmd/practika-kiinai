@@ -30,8 +30,9 @@ public class StudentService {
         return mapper.toResponse(findStudent(id));
     }
 
-    public List<StudentResponse> getStudentsByGroup(String group) {
-        return mapper.toResponseList(repository.getByGroup(group));
+    public Page<StudentResponse> getStudentsByGroup(Pageable pageable, String group) {
+        return repository.getByGroup(pageable, group)
+                .map(mapper::toResponse);
     }
 
     public StudentResponse createStudent(CreateStudentRequest request) {

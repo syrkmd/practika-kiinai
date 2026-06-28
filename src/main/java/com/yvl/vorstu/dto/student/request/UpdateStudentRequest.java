@@ -1,17 +1,23 @@
 package com.yvl.vorstu.dto.student.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class UpdateStudentRequest {
 
-    @NotBlank(message = "FIO must not be blank")
-    private String fio;
+    @NotBlank
+    private String firstName;
 
-    @NotBlank(message = "Group must not be blank")
-    private String group;
+    @NotBlank
+    private String lastName;
 
-    @NotBlank(message = "Phone number must not be blank")
+    private String middleName;
+
+    @NotBlank
     private String phoneNumber;
+
+    @NotNull
+    private Long groupId;
 }

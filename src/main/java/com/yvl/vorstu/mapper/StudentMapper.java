@@ -13,12 +13,18 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface StudentMapper {
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "studentGroup", ignore = true)
+    @Mapping(target = "user", ignore = true)
     Student toEntity(CreateStudentRequest request);
 
+    @Mapping(target = "group", source = "studentGroup.name")
     StudentResponse toResponse(Student student);
 
     List<StudentResponse> toResponseList(List<Student> students);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "studentGroup", ignore = true)
+    @Mapping(target = "user", ignore = true)
     void updateEntity(@MappingTarget Student student, UpdateStudentRequest request);
 }

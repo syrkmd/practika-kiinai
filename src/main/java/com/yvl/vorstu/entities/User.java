@@ -1,11 +1,16 @@
 package com.yvl.vorstu.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
 
     @Id

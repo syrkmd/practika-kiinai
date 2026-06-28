@@ -1,5 +1,6 @@
-package com.yvl.vorstu.security;
+package com.yvl.vorstu.security.jwt;
 
+import com.yvl.vorstu.security.user.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

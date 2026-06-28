@@ -1,4 +1,4 @@
-package com.yvl.vorstu.security;
+package com.yvl.vorstu.security.user;
 
 import com.yvl.vorstu.entities.User;
 import lombok.RequiredArgsConstructor;

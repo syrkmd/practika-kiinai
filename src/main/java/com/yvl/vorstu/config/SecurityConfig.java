@@ -1,9 +1,9 @@
 package com.yvl.vorstu.config;
 
-import com.yvl.vorstu.security.CustomUserDetailsService;
-import com.yvl.vorstu.security.JwtAccessDeniedHandler;
-import com.yvl.vorstu.security.JwtAuthenticationEntryPoint;
-import com.yvl.vorstu.security.JwtFilter;
+import com.yvl.vorstu.security.user.CustomUserDetailsService;
+import com.yvl.vorstu.security.handler.JwtAccessDeniedHandler;
+import com.yvl.vorstu.security.handler.JwtAuthenticationEntryPoint;
+import com.yvl.vorstu.security.jwt.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

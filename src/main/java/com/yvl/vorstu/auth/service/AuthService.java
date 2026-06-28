@@ -2,8 +2,8 @@ package com.yvl.vorstu.auth.service;
 
 import com.yvl.vorstu.auth.dto.request.LoginRequest;
 import com.yvl.vorstu.auth.dto.response.LoginResponse;
-import com.yvl.vorstu.security.JwtService;
-import com.yvl.vorstu.security.UserPrincipal;
+import com.yvl.vorstu.security.jwt.JwtService;
+import com.yvl.vorstu.security.user.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

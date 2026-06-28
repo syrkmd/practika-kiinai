@@ -1,6 +1,7 @@
-package com.yvl.vorstu.security;
+package com.yvl.vorstu.security.jwt;
 
 import com.yvl.vorstu.config.JwtProperties;
+import com.yvl.vorstu.security.user.UserPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;

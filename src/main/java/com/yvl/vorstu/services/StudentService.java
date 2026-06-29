@@ -9,6 +9,7 @@ import com.yvl.vorstu.entities.StudentGroup;
 import com.yvl.vorstu.entities.User;
 import com.yvl.vorstu.exception.GroupNotFoundException;
 import com.yvl.vorstu.exception.StudentNotFoundException;
+import com.yvl.vorstu.exception.UsernameAlreadyExistsException;
 import com.yvl.vorstu.mapper.StudentMapper;
 import com.yvl.vorstu.repositories.StudentGroupRepository;
 import com.yvl.vorstu.repositories.StudentRepository;
@@ -44,6 +45,10 @@ public class StudentService {
     }
 
     public StudentResponse createStudent(CreateStudentRequest request) {
+
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new UsernameAlreadyExistsException(request.getUsername());
+        }
 
         StudentGroup group = findGroup(request.getGroupId());
 

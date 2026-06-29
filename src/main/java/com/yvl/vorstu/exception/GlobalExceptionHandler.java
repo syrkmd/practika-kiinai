@@ -16,6 +16,24 @@ public class GlobalExceptionHandler {
         return new ApiError("STUDENT_NOT_FOUND", exception.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(GroupNotFoundException.class)
+    public ApiError handleGroupNotFound(GroupNotFoundException exception) {
+        return new ApiError("GROUP_NOT_FOUND", exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(TeacherNotFoundException.class)
+    public ApiError handleTeacherNotFound(TeacherNotFoundException exception) {
+        return new ApiError("TEACHER_NOT_FOUND", exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    public ApiError handleUsernameAlreadyExists(UsernameAlreadyExistsException exception) {
+        return new ApiError("USERNAME_ALREADY_EXISTS", exception.getMessage());
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiError handleValidation(MethodArgumentNotValidException exception) {

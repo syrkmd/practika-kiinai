@@ -1,7 +1,7 @@
 package com.yvl.vorstu.exception;
 
-public class StudentNotFoundException extends RuntimeException {
-    public StudentNotFoundException(Long id) {
-        super("Student with id: " + id + " was not found");
+public class TeacherNotFoundException extends RuntimeException {
+    public TeacherNotFoundException(Long id) {
+        super("Teacher with id: " + id + " was not found");
     }
 }

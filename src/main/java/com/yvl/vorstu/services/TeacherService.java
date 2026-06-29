@@ -74,8 +74,7 @@ public class TeacherService {
     }
 
     private Teacher findTeacher(Long id) {
-        return repository.findById(id).orElseThrow(
-                () -> new TeacherNotFoundException(id)
-        );
+        return repository.findById(id)
+                .orElseThrow(() -> new TeacherNotFoundException(id));
     }
 }

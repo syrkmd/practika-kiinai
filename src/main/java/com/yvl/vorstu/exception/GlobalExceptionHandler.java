@@ -52,6 +52,12 @@ public class GlobalExceptionHandler {
         return new ApiError("TEACHER_GROUP_ASSIGMENT_ALREADY_EXISTS", exception.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(AccessDeniedException.class)
+    public ApiError handleStudentAccessDenied(AccessDeniedException exception) {
+        return new ApiError("ACCESS_DENIED", exception.getMessage());
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiError handleValidation(MethodArgumentNotValidException exception) {

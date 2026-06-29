@@ -1,6 +1,7 @@
 package com.yvl.vorstu.security.user;
 
 import com.yvl.vorstu.entities.User;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 @RequiredArgsConstructor
+@Getter
 public class UserPrincipal implements UserDetails {
 
     private final User user;

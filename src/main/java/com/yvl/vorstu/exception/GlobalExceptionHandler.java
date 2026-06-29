@@ -34,6 +34,12 @@ public class GlobalExceptionHandler {
         return new ApiError("USERNAME_ALREADY_EXISTS", exception.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(GroupAlreadyExistsException.class)
+    public ApiError handleGroupAlreadyExists(GroupAlreadyExistsException exception) {
+        return new ApiError("GROUP_ALREADY_EXISTS", exception.getMessage());
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiError handleValidation(MethodArgumentNotValidException exception) {

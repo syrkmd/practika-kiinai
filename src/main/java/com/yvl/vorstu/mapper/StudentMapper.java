@@ -8,8 +8,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import java.util.List;
-
 @Mapper(componentModel = "spring")
 public interface StudentMapper {
 
@@ -20,8 +18,6 @@ public interface StudentMapper {
 
     @Mapping(target = "group", source = "studentGroup.name")
     StudentResponse toResponse(Student student);
-
-    List<StudentResponse> toResponseList(List<Student> students);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "studentGroup", ignore = true)

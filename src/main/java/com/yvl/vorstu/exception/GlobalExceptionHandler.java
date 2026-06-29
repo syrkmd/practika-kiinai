@@ -28,6 +28,12 @@ public class GlobalExceptionHandler {
         return new ApiError("TEACHER_NOT_FOUND", exception.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(TeacherGroupAssigmentNotFoundException.class)
+    public ApiError handleTeacherGroupAssigmentNotFound(TeacherGroupAssigmentNotFoundException exception) {
+        return new ApiError("TEACHER_GROUP_ASSIGMENT_NOT_FOUND", exception.getMessage());
+    }
+
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(UsernameAlreadyExistsException.class)
     public ApiError handleUsernameAlreadyExists(UsernameAlreadyExistsException exception) {
@@ -38,6 +44,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(GroupAlreadyExistsException.class)
     public ApiError handleGroupAlreadyExists(GroupAlreadyExistsException exception) {
         return new ApiError("GROUP_ALREADY_EXISTS", exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(TeacherGroupAssigmentAlreadyExistsException.class)
+    public ApiError handleTeacherGroupAssigmentAlreadyExists(TeacherGroupAssigmentAlreadyExistsException exception) {
+        return new ApiError("TEACHER_GROUP_ASSIGMENT_ALREADY_EXISTS", exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

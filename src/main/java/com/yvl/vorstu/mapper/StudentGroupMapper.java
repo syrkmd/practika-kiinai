@@ -9,7 +9,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface StudentGroupMapper {
@@ -20,8 +19,6 @@ public interface StudentGroupMapper {
     StudentGroup toEntity(CreateStudentGroupRequest request);
 
     StudentGroupResponse toResponse(StudentGroup group);
-
-    List<StudentGroupResponse> toResponseList(List<StudentGroup> groups);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "students", ignore = true)

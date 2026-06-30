@@ -14,6 +14,7 @@ public class StudentResponse {
     private String middleName;
 
     private String phoneNumber;
+    private String email;
 
     private String group;
 }

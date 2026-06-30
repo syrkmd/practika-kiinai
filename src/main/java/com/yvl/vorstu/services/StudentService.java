@@ -7,10 +7,7 @@ import com.yvl.vorstu.entities.Role;
 import com.yvl.vorstu.entities.Student;
 import com.yvl.vorstu.entities.StudentGroup;
 import com.yvl.vorstu.entities.User;
-import com.yvl.vorstu.exception.AccessDeniedException;
-import com.yvl.vorstu.exception.GroupNotFoundException;
-import com.yvl.vorstu.exception.StudentNotFoundException;
-import com.yvl.vorstu.exception.UsernameAlreadyExistsException;
+import com.yvl.vorstu.exception.*;
 import com.yvl.vorstu.mapper.StudentMapper;
 import com.yvl.vorstu.repositories.StudentGroupRepository;
 import com.yvl.vorstu.repositories.StudentRepository;
@@ -49,6 +46,10 @@ public class StudentService {
             throw new UsernameAlreadyExistsException(request.getUsername());
         }
 
+        if (repository.existsByEmail(request.getEmail())) {
+            throw new EmailAlreadyExistsException(request.getEmail());
+        }
+
         StudentGroup group = findGroup(request.getGroupId());
 
         User user = User.builder()
@@ -72,6 +73,10 @@ public class StudentService {
     public StudentResponse updateStudent(Long id, UpdateStudentRequest request) {
 
         Student student = getEditableStudent(id);
+
+        if (!student.getEmail().equals(request.getEmail()) && repository.existsByEmail(request.getEmail())) {
+            throw new EmailAlreadyExistsException(request.getEmail());
+        }
 
         mapper.updateEntity(student, request);
 
@@ -167,10 +172,9 @@ public class StudentService {
     private void checkTeacherAccess(Student student) {
 
         boolean available = teacherGroupAssignmentRepository
-                .findGroupsByTeacher(currentUserService.getCurrentTeacher())
-                .stream()
-                .anyMatch(group ->
-                        group.getId().equals(student.getStudentGroup().getId())
+                .existsByTeacherAndStudentGroup(
+                        currentUserService.getCurrentTeacher(),
+                        student.getStudentGroup()
                 );
 
         if (!available) {

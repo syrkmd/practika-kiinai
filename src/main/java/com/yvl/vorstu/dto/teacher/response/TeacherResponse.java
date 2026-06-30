@@ -14,4 +14,5 @@ public class TeacherResponse {
     private String middleName;
 
     private String phoneNumber;
+    private String email;
 }

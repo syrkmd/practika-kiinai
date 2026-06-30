@@ -28,6 +28,9 @@ public class Student {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "group_id", nullable = false)
     private StudentGroup studentGroup;

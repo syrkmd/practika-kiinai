@@ -1,5 +1,7 @@
 package com.yvl.vorstu.dto.teacher.request;
 
+import com.yvl.vorstu.validation.annotation.ValidEmail;
+import com.yvl.vorstu.validation.annotation.ValidPhone;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -15,7 +17,12 @@ public class CreateTeacherRequest {
     private String middleName;
 
     @NotBlank
+    @ValidPhone
     private String phoneNumber;
+
+    @NotBlank
+    @ValidEmail
+    private String email;
 
     @NotBlank
     private String username;

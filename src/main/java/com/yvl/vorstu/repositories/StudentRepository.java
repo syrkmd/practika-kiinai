@@ -14,8 +14,6 @@ import java.util.Optional;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
-    Page<Student> findByStudentGroupName(String name, Pageable pageable);
-
     Page<Student> findByStudentGroup(StudentGroup studentGroup, Pageable pageable);
 
     Page<Student> findByStudentGroupIn(
@@ -24,4 +22,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     );
 
     Optional<Student> findByUser(User user);
+
+    boolean existsByEmail(String email);
 }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @SecurityRequirement(name = "Bearer Authentication")
 @RestController
-@RequestMapping("api/groups")
+@RequestMapping("api/student-groups")
 @RequiredArgsConstructor
 public class StudentGroupController {
 

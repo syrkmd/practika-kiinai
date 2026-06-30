@@ -52,6 +52,12 @@ public class GlobalExceptionHandler {
         return new ApiError("TEACHER_GROUP_ASSIGMENT_ALREADY_EXISTS", exception.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ApiError handleEmailAlreadyExists(EmailAlreadyExistsException exception) {
+        return new ApiError("EMAIL_ALREADY_EXISTS", exception.getMessage());
+    }
+
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(AccessDeniedException.class)
     public ApiError handleStudentAccessDenied(AccessDeniedException exception) {

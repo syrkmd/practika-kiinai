@@ -6,6 +6,7 @@ import com.yvl.vorstu.dto.teacher.response.TeacherResponse;
 import com.yvl.vorstu.entities.Role;
 import com.yvl.vorstu.entities.Teacher;
 import com.yvl.vorstu.entities.User;
+import com.yvl.vorstu.exception.EmailAlreadyExistsException;
 import com.yvl.vorstu.exception.TeacherNotFoundException;
 import com.yvl.vorstu.exception.UsernameAlreadyExistsException;
 import com.yvl.vorstu.mapper.TeacherMapper;
@@ -41,6 +42,10 @@ public class TeacherService {
             throw new UsernameAlreadyExistsException(request.getUsername());
         }
 
+        if (repository.existsByEmail(request.getEmail())) {
+            throw new EmailAlreadyExistsException(request.getEmail());
+        }
+
         User user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -61,6 +66,10 @@ public class TeacherService {
     public TeacherResponse updateTeacher(Long id, UpdateTeacherRequest request) {
 
         Teacher teacher = findTeacher(id);
+
+        if (!teacher.getEmail().equals(request.getEmail()) && repository.existsByEmail(request.getEmail())) {
+            throw new EmailAlreadyExistsException(request.getEmail());
+        }
 
         mapper.updateEntity(teacher, request);
 

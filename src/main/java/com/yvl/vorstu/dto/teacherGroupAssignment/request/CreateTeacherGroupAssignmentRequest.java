@@ -1,4 +1,4 @@
-package com.yvl.vorstu.dto.teacher_group_assignment.request;
+package com.yvl.vorstu.dto.teacherGroupAssignment.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

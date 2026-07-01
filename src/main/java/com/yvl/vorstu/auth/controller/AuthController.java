@@ -3,6 +3,8 @@ package com.yvl.vorstu.auth.controller;
 import com.yvl.vorstu.auth.dto.request.LoginRequest;
 import com.yvl.vorstu.auth.dto.response.LoginResponse;
 import com.yvl.vorstu.auth.service.AuthService;
+import com.yvl.vorstu.dto.refreshToken.request.RefreshTokenRequest;
+import com.yvl.vorstu.dto.refreshToken.response.RefreshTokenResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,5 +22,11 @@ public class AuthController {
     @PostMapping("/login")
     public LoginResponse login(@Valid @RequestBody LoginRequest request) {
         return service.login(request);
+    }
+
+    @PostMapping("/refresh")
+    public RefreshTokenResponse refresh(@Valid @RequestBody RefreshTokenRequest request) {
+        System.out.println("refresh");
+        return service.refresh(request);
     }
 }

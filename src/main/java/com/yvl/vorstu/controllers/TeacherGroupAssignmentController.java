@@ -1,7 +1,7 @@
 package com.yvl.vorstu.controllers;
 
-import com.yvl.vorstu.dto.teacher_group_assignment.request.CreateTeacherGroupAssignmentRequest;
-import com.yvl.vorstu.dto.teacher_group_assignment.response.TeacherGroupAssignmentResponse;
+import com.yvl.vorstu.dto.teacherGroupAssignment.request.CreateTeacherGroupAssignmentRequest;
+import com.yvl.vorstu.dto.teacherGroupAssignment.response.TeacherGroupAssignmentResponse;
 import com.yvl.vorstu.services.TeacherGroupAssignmentService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;

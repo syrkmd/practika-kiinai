@@ -64,6 +64,12 @@ public class GlobalExceptionHandler {
         return new ApiError("ACCESS_DENIED", exception.getMessage());
     }
 
+    @ExceptionHandler(InvalidRefreshTokenException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiError handleInvalidRefreshToken(InvalidRefreshTokenException exception) {
+        return new ApiError("INVALID_REFRESH_TOKEN", exception.getMessage());
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiError handleValidation(MethodArgumentNotValidException exception) {

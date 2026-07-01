@@ -1,7 +1,7 @@
 package com.yvl.vorstu.services;
 
-import com.yvl.vorstu.dto.teacher_group_assignment.request.CreateTeacherGroupAssignmentRequest;
-import com.yvl.vorstu.dto.teacher_group_assignment.response.TeacherGroupAssignmentResponse;
+import com.yvl.vorstu.dto.teacherGroupAssignment.request.CreateTeacherGroupAssignmentRequest;
+import com.yvl.vorstu.dto.teacherGroupAssignment.response.TeacherGroupAssignmentResponse;
 import com.yvl.vorstu.entities.StudentGroup;
 import com.yvl.vorstu.entities.Teacher;
 import com.yvl.vorstu.entities.TeacherGroupAssignment;

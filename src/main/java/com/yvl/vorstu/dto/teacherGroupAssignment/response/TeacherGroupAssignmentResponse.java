@@ -1,4 +1,4 @@
-package com.yvl.vorstu.dto.teacher_group_assignment.response;
+package com.yvl.vorstu.dto.teacherGroupAssignment.response;
 
 import lombok.Builder;
 import lombok.Data;

@@ -1,8 +1,8 @@
 package com.yvl.vorstu.services;
 
-import com.yvl.vorstu.dto.student_group.request.CreateStudentGroupRequest;
-import com.yvl.vorstu.dto.student_group.request.UpdateStudentGroupRequest;
-import com.yvl.vorstu.dto.student_group.response.StudentGroupResponse;
+import com.yvl.vorstu.dto.studentGroup.request.CreateStudentGroupRequest;
+import com.yvl.vorstu.dto.studentGroup.request.UpdateStudentGroupRequest;
+import com.yvl.vorstu.dto.studentGroup.response.StudentGroupResponse;
 import com.yvl.vorstu.entities.StudentGroup;
 import com.yvl.vorstu.exception.GroupAlreadyExistsException;
 import com.yvl.vorstu.exception.GroupNotFoundException;

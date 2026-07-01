@@ -1,4 +1,4 @@
-package com.yvl.vorstu.dto.student_group.response;
+package com.yvl.vorstu.dto.studentGroup.response;
 
 import lombok.Builder;
 import lombok.Data;

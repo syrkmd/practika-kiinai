@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -19,11 +21,21 @@ public class JwtService {
 
     private final JwtProperties properties;
 
-    public String generateToken(UserPrincipal principal) {
+    public String generateAccessToken(UserPrincipal principal) {
         return Jwts.builder()
                 .subject(principal.getUsername())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + properties.getExpiration()))
+                .expiration(new Date(System.currentTimeMillis() + properties.getAccessExpiration()))
+                .signWith(getSigningKey())
+                .compact();
+    }
+
+    public String generateRefreshToken(UserPrincipal principal) {
+        return Jwts.builder()
+                .subject(principal.getUsername())
+                .id(UUID.randomUUID().toString())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + properties.getRefreshExpiration()))
                 .signWith(getSigningKey())
                 .compact();
     }
@@ -37,6 +49,16 @@ public class JwtService {
 
         return username.equals(userDetails.getUsername())
                 && !isTokenExpired(token);
+    }
+
+    public String extractJti(String token) {
+        return extractAllClaims(token).getId();
+    }
+
+    public Instant extractExpiration(String token) {
+        return extractAllClaims(token)
+                .getExpiration()
+                .toInstant();
     }
 
     private SecretKey getSigningKey() {

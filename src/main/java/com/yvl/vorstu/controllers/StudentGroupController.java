@@ -1,8 +1,8 @@
 package com.yvl.vorstu.controllers;
 
-import com.yvl.vorstu.dto.student_group.request.CreateStudentGroupRequest;
-import com.yvl.vorstu.dto.student_group.request.UpdateStudentGroupRequest;
-import com.yvl.vorstu.dto.student_group.response.StudentGroupResponse;
+import com.yvl.vorstu.dto.studentGroup.request.CreateStudentGroupRequest;
+import com.yvl.vorstu.dto.studentGroup.request.UpdateStudentGroupRequest;
+import com.yvl.vorstu.dto.studentGroup.response.StudentGroupResponse;
 import com.yvl.vorstu.services.StudentGroupService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;

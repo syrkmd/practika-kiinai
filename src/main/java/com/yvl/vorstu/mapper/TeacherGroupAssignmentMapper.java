@@ -1,7 +1,7 @@
 package com.yvl.vorstu.mapper;
 
-import com.yvl.vorstu.dto.teacher_group_assignment.request.CreateTeacherGroupAssignmentRequest;
-import com.yvl.vorstu.dto.teacher_group_assignment.response.TeacherGroupAssignmentResponse;
+import com.yvl.vorstu.dto.teacherGroupAssignment.request.CreateTeacherGroupAssignmentRequest;
+import com.yvl.vorstu.dto.teacherGroupAssignment.response.TeacherGroupAssignmentResponse;
 import com.yvl.vorstu.entities.TeacherGroupAssignment;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

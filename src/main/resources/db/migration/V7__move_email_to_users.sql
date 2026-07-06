@@ -17,6 +17,13 @@ SET email = 'admin@sstu.ru'
 WHERE username = 'admin'
   AND email IS NULL;
 
+-- Safety net: any other user without a matching students/teachers row
+-- (e.g. a profile deleted after the account was created) would otherwise
+-- keep email = NULL and break the NOT NULL constraint below.
+UPDATE users
+SET email = username || '@sstu.ru'
+WHERE email IS NULL;
+
 ALTER TABLE users
     ALTER COLUMN email SET NOT NULL;
 

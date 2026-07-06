@@ -1,7 +1,9 @@
 package com.yvl.vorstu.services;
 
+import com.yvl.vorstu.entities.RegistrationInvitation;
 import com.yvl.vorstu.entities.Role;
 import com.yvl.vorstu.entities.StudentGroup;
+import com.yvl.vorstu.exception.*;
 import com.yvl.vorstu.repositories.RegistrationInvitationRepository;
 import com.yvl.vorstu.repositories.UserRepository;
 import com.yvl.vorstu.security.hash.HashService;
@@ -32,7 +34,7 @@ public class RegistrationInvitationService {
 
     public void upload(MultipartFile file) {
         if (file.isEmpty()) {
-            throw new IllegalArgumentException("CSV file is empty");
+            throw new EmptyCsvFileException();
         }
 
         parseCsv(file);
@@ -51,7 +53,7 @@ public class RegistrationInvitationService {
 
             parser.stream().forEach(this::processRecord);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to read CSV file", e);
+            throw new CsvProcessingException(e);
         }
     }
 
@@ -64,20 +66,35 @@ public class RegistrationInvitationService {
 
         Role role = parseRole(record.get("role"));
 
-        StudentGroup group = findGroup(role, record.get("group"));
+        StudentGroup group = findGroup(role, groupName);
+
+        validateRecord(email);
 
         String token = generateToken();
-
         String tokenHash = hashService.sha256(token);
-
         Instant expiresAt = Instant.now().plus(Duration.ofDays(1));
+
+        RegistrationInvitation invitation = createInvitation(
+                firstName,
+                lastName,
+                middleName,
+                email,
+                role,
+                group,
+                tokenHash,
+                expiresAt
+        );
+
+        repository.save(invitation);
+
+        // TODO send invitation email
     }
 
     private Role parseRole(String value) {
         try {
             return Role.valueOf(value.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Unknown role: " + value);
+            throw new InvalidRoleException(value);
         }
     }
 
@@ -94,7 +111,7 @@ public class RegistrationInvitationService {
         return UUID.randomUUID().toString();
     }
 
-    private void validateRecord(String email, Role role, StudentGroup group) {
+    private void validateRecord(String email) {
         if (!emailValidationService.isValid(email)) {
             throw new InvalidEmailException(email);
         }
@@ -106,6 +123,28 @@ public class RegistrationInvitationService {
         if (userRepository.existsByEmail(email)) {
             throw new UserAlreadyExistsException(email);
         }
+    }
+
+    private RegistrationInvitation createInvitation(
+            String firstName,
+            String lastName,
+            String middleName,
+            String email,
+            Role role,
+            StudentGroup group,
+            String tokenHash,
+            Instant expiresAt
+    ) {
+        return RegistrationInvitation.builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .middleName(middleName)
+                .email(email)
+                .role(role)
+                .group(group)
+                .tokenHash(tokenHash)
+                .expiresAt(expiresAt)
+                .build();
     }
 }
 

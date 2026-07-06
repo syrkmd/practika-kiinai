@@ -85,7 +85,8 @@ public class TeacherService {
     }
 
     public void deleteTeacherById(Long id) {
-        repository.delete(findTeacher(id));
+        Teacher teacher = findTeacher(id);
+        userRepository.delete(teacher.getUser());
     }
 
     private Teacher findTeacher(Long id) {

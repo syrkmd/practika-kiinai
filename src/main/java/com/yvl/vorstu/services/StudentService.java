@@ -94,7 +94,8 @@ public class StudentService {
     }
 
     public void deleteStudentById(Long id) {
-        repository.delete(findStudent(id));
+        Student student = findStudent(id);
+        userRepository.delete(student.getUser());
     }
 
 

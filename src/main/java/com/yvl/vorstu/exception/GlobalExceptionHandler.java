@@ -58,6 +58,18 @@ public class GlobalExceptionHandler {
         return new ApiError("EMAIL_ALREADY_EXISTS", exception.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(RegistrationInvitationAlreadyExistsException.class)
+    public ApiError handleRegistrationInvitationAlreadyExists(RegistrationInvitationAlreadyExistsException exception) {
+        return new ApiError("REGISTRATION_INVITATION_ALREADY_EXISTS", exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ApiError handleUserAlreadyExists(UserAlreadyExistsException exception) {
+        return new ApiError("USER_ALREADY_EXISTS", exception.getMessage());
+    }
+
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(AccessDeniedException.class)
     public ApiError handleStudentAccessDenied(AccessDeniedException exception) {
@@ -68,6 +80,30 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ApiError handleInvalidRefreshToken(InvalidRefreshTokenException exception) {
         return new ApiError("INVALID_REFRESH_TOKEN", exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidEmailException.class)
+    public ApiError handleInvalidEmail(InvalidEmailException exception) {
+        return new ApiError("INVALID_EMAIL", exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidRoleException.class)
+    public ApiError handleInvalidRole(InvalidRoleException exception) {
+        return new ApiError("INVALID_ROLE", exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(EmptyCsvFileException.class)
+    public ApiError handleEmptyCsvFile(EmptyCsvFileException exception) {
+        return new ApiError("EMPTY_CSV_FILE", exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(CsvProcessingException.class)
+    public ApiError handleCsvProcessing(CsvProcessingException exception) {
+        return new ApiError("CSV_PROCESSING_ERROR", exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -118,4 +118,10 @@ public class GlobalExceptionHandler {
 
         return new ApiError("VALIDATION_ERROR", message);
     }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(EmailSendingException.class)
+    public ApiError handleEmailSending(EmailSendingException exception) {
+        return new ApiError("EMAIL_SENDING_ERROR", exception.getMessage());
+    }
 }

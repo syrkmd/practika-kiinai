@@ -46,7 +46,7 @@ public class StudentService {
             throw new UsernameAlreadyExistsException(request.getUsername());
         }
 
-        if (repository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new EmailAlreadyExistsException(request.getEmail());
         }
 
@@ -54,6 +54,7 @@ public class StudentService {
 
         User user = User.builder()
                 .username(request.getUsername())
+                .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.STUDENT)
                 .build();
@@ -74,9 +75,14 @@ public class StudentService {
 
         Student student = getEditableStudent(id);
 
-        if (!student.getEmail().equals(request.getEmail()) && repository.existsByEmail(request.getEmail())) {
+        User user = student.getUser();
+
+        if (!user.getEmail().equals(request.getEmail()) && userRepository.existsByEmail(request.getEmail())) {
             throw new EmailAlreadyExistsException(request.getEmail());
         }
+
+        user.setEmail(request.getEmail());
+        userRepository.save(user);
 
         mapper.updateEntity(student, request);
 

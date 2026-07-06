@@ -16,6 +16,7 @@ public interface TeacherMapper {
     @Mapping(target = "teacherGroupAssignments", ignore = true)
     Teacher toEntity(CreateTeacherRequest request);
 
+    @Mapping(target = "email", source = "user.email")
     TeacherResponse toResponse(Teacher teacher);
 
     @Mapping(target = "id", ignore = true)

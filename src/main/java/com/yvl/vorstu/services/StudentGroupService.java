@@ -26,7 +26,7 @@ public class StudentGroupService {
     }
 
     public StudentGroupResponse getGroupById(Long id) {
-        return mapper.toResponse(findGroup(id));
+        return mapper.toResponse(findGroupById(id));
     }
 
     public StudentGroupResponse createGroup(CreateStudentGroupRequest request) {
@@ -44,7 +44,7 @@ public class StudentGroupService {
 
     public StudentGroupResponse updateGroup(Long id, UpdateStudentGroupRequest request) {
 
-        StudentGroup studentGroup = findGroup(id);
+        StudentGroup studentGroup = findGroupById(id);
 
         mapper.updateEntity(studentGroup, request);
 
@@ -53,11 +53,15 @@ public class StudentGroupService {
         return mapper.toResponse(saved);
     }
 
+    public StudentGroup findGroupByName(String name) {
+        return repository.findByName(name)
+                .orElseThrow(() -> new GroupNotFoundException(name));
+    }
     public void deleteGroupById(Long id) {
-        repository.delete(findGroup(id));
+        repository.delete(findGroupById(id));
     }
 
-    private StudentGroup findGroup(Long id) {
+    private StudentGroup findGroupById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new GroupNotFoundException(id));
     }

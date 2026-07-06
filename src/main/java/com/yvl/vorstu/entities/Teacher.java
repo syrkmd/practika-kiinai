@@ -31,9 +31,6 @@ public class Teacher {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
-
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;

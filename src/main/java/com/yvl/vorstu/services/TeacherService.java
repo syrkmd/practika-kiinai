@@ -42,12 +42,13 @@ public class TeacherService {
             throw new UsernameAlreadyExistsException(request.getUsername());
         }
 
-        if (repository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new EmailAlreadyExistsException(request.getEmail());
         }
 
         User user = User.builder()
                 .username(request.getUsername())
+                .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.TEACHER)
                 .build();
@@ -67,9 +68,14 @@ public class TeacherService {
 
         Teacher teacher = findTeacher(id);
 
-        if (!teacher.getEmail().equals(request.getEmail()) && repository.existsByEmail(request.getEmail())) {
+        User user = teacher.getUser();
+
+        if (!user.getEmail().equals(request.getEmail()) && userRepository.existsByEmail(request.getEmail())) {
             throw new EmailAlreadyExistsException(request.getEmail());
         }
+
+        user.setEmail(request.getEmail());
+        userRepository.save(user);
 
         mapper.updateEntity(teacher, request);
 

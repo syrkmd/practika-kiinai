@@ -17,6 +17,7 @@ public interface StudentMapper {
     Student toEntity(CreateStudentRequest request);
 
     @Mapping(target = "group", source = "studentGroup.name")
+    @Mapping(target = "email", source = "user.email")
     StudentResponse toResponse(Student student);
 
     @Mapping(target = "id", ignore = true)

@@ -3,6 +3,7 @@ package com.yvl.vorstu.services;
 import com.yvl.vorstu.dto.teacher.request.CreateTeacherRequest;
 import com.yvl.vorstu.dto.teacher.request.UpdateTeacherRequest;
 import com.yvl.vorstu.dto.teacher.response.TeacherResponse;
+import com.yvl.vorstu.entities.RegistrationInvitation;
 import com.yvl.vorstu.entities.Role;
 import com.yvl.vorstu.entities.Teacher;
 import com.yvl.vorstu.entities.User;
@@ -12,6 +13,7 @@ import com.yvl.vorstu.exception.UsernameAlreadyExistsException;
 import com.yvl.vorstu.mapper.TeacherMapper;
 import com.yvl.vorstu.repositories.TeacherRepository;
 import com.yvl.vorstu.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -87,6 +89,21 @@ public class TeacherService {
     public void deleteTeacherById(Long id) {
         Teacher teacher = findTeacher(id);
         userRepository.delete(teacher.getUser());
+    }
+
+    @Transactional
+    public Teacher createFromInvitation(
+            RegistrationInvitation invitation,
+            User user
+    ) {
+        Teacher teacher = Teacher.builder()
+                .firstName(invitation.getFirstName())
+                .lastName(invitation.getLastName())
+                .middleName(invitation.getMiddleName())
+                .user(user)
+                .build();
+
+        return repository.save(teacher);
     }
 
     private Teacher findTeacher(Long id) {

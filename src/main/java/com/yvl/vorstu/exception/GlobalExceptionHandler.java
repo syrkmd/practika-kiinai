@@ -34,6 +34,18 @@ public class GlobalExceptionHandler {
         return new ApiError("TEACHER_GROUP_ASSIGMENT_NOT_FOUND", exception.getMessage());
     }
 
+    @ExceptionHandler(InvalidRegistrationInvitationException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiError handleInvalidRegistrationInvitation(InvalidRegistrationInvitationException exception) {
+        return new ApiError("INVALID_REGISTRATION_INVITATION", exception.getMessage());
+    }
+
+    @ExceptionHandler(RegistrationInvitationExpiredException.class)
+    @ResponseStatus(HttpStatus.GONE)
+    public ApiError handleRegistrationInvitationExpired(RegistrationInvitationExpiredException exception) {
+        return new ApiError("REGISTRATION_INVITATION_EXPIRED", exception.getMessage());
+    }
+
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(UsernameAlreadyExistsException.class)
     public ApiError handleUsernameAlreadyExists(UsernameAlreadyExistsException exception) {

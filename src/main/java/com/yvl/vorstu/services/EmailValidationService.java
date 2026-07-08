@@ -11,7 +11,8 @@ public class EmailValidationService {
     private static final Set<String> ALLOWED_DOMAINS = Set.of(
             "mail.ru",
             "yandex.ru",
-            "sstu.ru"
+            "sstu.ru",
+            "gmail.com"
     );
 
     public boolean isValid(String value) {

@@ -3,16 +3,14 @@ package com.yvl.vorstu.services;
 import com.yvl.vorstu.dto.student.request.CreateStudentRequest;
 import com.yvl.vorstu.dto.student.request.UpdateStudentRequest;
 import com.yvl.vorstu.dto.student.response.StudentResponse;
-import com.yvl.vorstu.entities.Role;
-import com.yvl.vorstu.entities.Student;
-import com.yvl.vorstu.entities.StudentGroup;
-import com.yvl.vorstu.entities.User;
+import com.yvl.vorstu.entities.*;
 import com.yvl.vorstu.exception.*;
 import com.yvl.vorstu.mapper.StudentMapper;
 import com.yvl.vorstu.repositories.StudentGroupRepository;
 import com.yvl.vorstu.repositories.StudentRepository;
 import com.yvl.vorstu.repositories.TeacherGroupAssignmentRepository;
 import com.yvl.vorstu.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -98,6 +96,21 @@ public class StudentService {
         userRepository.delete(student.getUser());
     }
 
+    @Transactional
+    public Student createFromInvitation(
+            RegistrationInvitation invitation,
+            User user
+    ) {
+        Student student = Student.builder()
+                .firstName(invitation.getFirstName())
+                .lastName(invitation.getLastName())
+                .middleName(invitation.getMiddleName())
+                .studentGroup(invitation.getGroup())
+                .user(user)
+                .build();
+
+        return repository.save(student);
+    }
 
     private Page<Student> getAvailableStudents(Pageable pageable) {
 

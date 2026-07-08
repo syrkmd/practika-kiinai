@@ -52,6 +52,23 @@ public class RegistrationInvitationService {
         eventPublisher.publishEvent(new RegistrationInvitationsCreatedEvent(invitationEmails));
     }
 
+    public RegistrationInvitation getByToken(String token) {
+        String tokenHash = hashService.sha256(token);
+
+        RegistrationInvitation invitation = repository.findByTokenHash(tokenHash)
+                .orElseThrow(InvalidRegistrationInvitationException::new);
+
+        if (invitation.getExpiresAt().isBefore(Instant.now())) {
+            throw new RegistrationInvitationExpiredException();
+        }
+
+        return invitation;
+    }
+
+    public void delete(RegistrationInvitation invitation) {
+        repository.delete(invitation);
+    }
+
     private List<InvitationEmailDto> parseCsv(MultipartFile file) {
         List<RegistrationInvitation> invitations = new ArrayList<>();
         List<InvitationEmailDto> invitationEmails = new ArrayList<>();

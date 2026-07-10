@@ -77,6 +77,29 @@ public class RegistrationInvitationService {
         repository.delete(invitation);
     }
 
+    @Transactional
+    public void resend(Long id) {
+        RegistrationInvitation invitation = repository.findById(id)
+                .orElseThrow(InvalidRegistrationInvitationException::new);
+
+        if (invitation.getExpiresAt().isBefore(Instant.now())) {
+            throw new RegistrationInvitationExpiredException();
+        }
+
+        String token = generateToken();
+        String tokenHash = hashService.sha256(token);
+
+        invitation.setTokenHash(tokenHash);
+        invitation.setExpiresAt(Instant.now().plus(Duration.ofDays(1)));
+
+        repository.save(invitation);
+
+        outboxService.publish(
+                OutboxEventType.REGISTRATION_INVITATION_EMAIL,
+                new RegistrationInvitationEmailPayload(invitation.getEmail(), token)
+        );
+    }
+
     private List<InvitationEmailDto> parseCsv(MultipartFile file) {
         List<RegistrationInvitation> invitations = new ArrayList<>();
         List<InvitationEmailDto> invitationEmails = new ArrayList<>();

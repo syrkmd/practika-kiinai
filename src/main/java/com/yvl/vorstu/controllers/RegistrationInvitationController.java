@@ -18,12 +18,16 @@ public class RegistrationInvitationController {
     private final RegistrationInvitationService service;
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping(
-            value = "/upload",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    )
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void upload(@RequestParam MultipartFile file) {
         service.upload(file);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{id}/resend")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void resend(@PathVariable Long id) {
+        service.resend(id);
     }
 }

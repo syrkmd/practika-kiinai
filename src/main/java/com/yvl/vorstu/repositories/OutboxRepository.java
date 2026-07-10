@@ -13,15 +13,6 @@ import java.util.UUID;
 @Repository
 public interface OutboxRepository extends JpaRepository<OutboxEvent, UUID> {
 
-    /**
-     * Claims up to {@code limit} PENDING events that are due for processing.
-     * Uses FOR UPDATE SKIP LOCKED so that concurrent callers (multiple app
-     * instances, or overlapping polls) never claim the same row — a locked
-     * row is simply skipped instead of blocking the caller.
-     * Must be called from within an active transaction that stays open for
-     * the whole claim-process-update cycle, otherwise the lock is released
-     * before the row is actually processed.
-     */
     @Query(
             value = """
                     SELECT * FROM outbox

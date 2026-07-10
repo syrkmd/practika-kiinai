@@ -16,10 +16,6 @@ public class OutboxService {
     private final OutboxRepository repository;
     private final ObjectMapper objectMapper;
 
-    /**
-     * Payload should be a plain, already-loaded DTO — do not pass JPA
-     * entities directly, to avoid lazy-initialization issues on serialization.
-     */
     public UUID publish(OutboxEventType type, Object payload) {
         OutboxEvent event = OutboxEvent.builder()
                 .type(type)

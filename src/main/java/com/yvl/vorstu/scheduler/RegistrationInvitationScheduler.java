@@ -19,8 +19,6 @@ public class RegistrationInvitationScheduler {
     @Transactional
     @Scheduled(cron = "0 0 * * * *")
     public void deleteExpiredInvitations() {
-        repository.deleteByExpiresAtBefore(Instant.now());
-
         long deleted = repository.deleteByExpiresAtBefore(Instant.now());
 
         log.info("Deleted {} expired registration invitations", deleted);

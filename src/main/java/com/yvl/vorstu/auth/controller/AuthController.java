@@ -30,17 +30,13 @@ public class AuthController {
     }
 
     @GetMapping("/register")
-    public RegistrationInvitationResponse getInvitation(
-            @RequestParam String token
-    ) {
+    public RegistrationInvitationResponse getInvitation(@RequestParam String token) {
         return service.getRegistrationInvitation(token);
     }
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public LoginResponse register(
-            @Valid @RequestBody RegisterRequest request
-    ) {
+    public LoginResponse register(@Valid @RequestBody RegisterRequest request) {
         return service.register(request);
     }
 }

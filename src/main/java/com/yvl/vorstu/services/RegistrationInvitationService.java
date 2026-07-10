@@ -1,10 +1,11 @@
 package com.yvl.vorstu.services;
 
 import com.yvl.vorstu.dto.registrationInvitation.InvitationEmailDto;
+import com.yvl.vorstu.dto.registrationInvitation.RegistrationInvitationEmailPayload;
+import com.yvl.vorstu.entities.OutboxEventType;
 import com.yvl.vorstu.entities.RegistrationInvitation;
 import com.yvl.vorstu.entities.Role;
 import com.yvl.vorstu.entities.StudentGroup;
-import com.yvl.vorstu.event.RegistrationInvitationsCreatedEvent;
 import com.yvl.vorstu.exception.*;
 import com.yvl.vorstu.repositories.RegistrationInvitationRepository;
 import com.yvl.vorstu.repositories.UserRepository;
@@ -13,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.springframework.context.ApplicationEventPublisher;
+import org.apache.commons.csv.DuplicateHeaderMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,7 +40,7 @@ public class RegistrationInvitationService {
     private final StudentGroupService groupService;
     private final HashService hashService;
     private final EmailValidationService emailValidationService;
-    private final ApplicationEventPublisher eventPublisher;
+    private final OutboxService outboxService;
 
     @Transactional
     public void upload(MultipartFile file) {
@@ -49,7 +50,14 @@ public class RegistrationInvitationService {
 
         List<InvitationEmailDto> invitationEmails = parseCsv(file);
 
-        eventPublisher.publishEvent(new RegistrationInvitationsCreatedEvent(invitationEmails));
+        invitationEmails.forEach(this::publishOutboxEvent);
+    }
+
+    private void publishOutboxEvent(InvitationEmailDto invitationEmail) {
+        outboxService.publish(
+                OutboxEventType.REGISTRATION_INVITATION_EMAIL,
+                new RegistrationInvitationEmailPayload(invitationEmail.getEmail(), invitationEmail.getToken())
+        );
     }
 
     public RegistrationInvitation getByToken(String token) {
@@ -81,8 +89,11 @@ public class RegistrationInvitationService {
                     .setSkipHeaderRecord(true)
                     .setIgnoreHeaderCase(true)
                     .setTrim(true)
+                    .setDuplicateHeaderMode(DuplicateHeaderMode.DISALLOW)
                     .get()
                     .parse(reader);
+
+            validateHeaders(parser);
 
             parser.stream().forEach(record -> processRecord(record, invitations, invitationEmails, emailsInBatch));
         } catch (IOException | IllegalArgumentException e) {
@@ -105,6 +116,8 @@ public class RegistrationInvitationService {
         String middleName = record.get("middleName");
         String email = record.get("email");
         String groupName = record.get("group");
+
+        validateRequiredFields(firstName, lastName, email);
 
         Role role = parseRole(record.get("role"));
 
@@ -133,17 +146,29 @@ public class RegistrationInvitationService {
     }
 
     private Role parseRole(String value) {
+        Role role;
+
         try {
-            return Role.valueOf(value.toUpperCase());
+            role = Role.valueOf(value.toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new InvalidRoleException(value);
         }
+
+        if (role == Role.ADMIN) {
+            throw new InvalidRoleException(value);
+        }
+
+        return role;
     }
 
     private StudentGroup findGroup(Role role, String groupName) {
 
         if (role == Role.TEACHER) {
             return null;
+        }
+
+        if (groupName == null || groupName.isBlank()) {
+            throw new InvalidCsvFieldException("Group is required for STUDENT role");
         }
 
         return groupService.findGroupByName(groupName);
@@ -168,6 +193,42 @@ public class RegistrationInvitationService {
 
         if (userRepository.existsByEmail(email)) {
             throw new UserAlreadyExistsException(email);
+        }
+    }
+
+    private void validateHeaders(CSVParser parser) {
+
+        Set<String> headers = parser.getHeaderMap().keySet();
+
+        List<String> required = List.of(
+                "firstName",
+                "lastName",
+                "middleName",
+                "email",
+                "role",
+                "group"
+        );
+
+        if (!headers.containsAll(required) || headers.size() != required.size()) {
+            throw new InvalidCsvHeaderException();
+        }
+    }
+
+    private void validateRequiredFields(
+            String firstName,
+            String lastName,
+            String email
+    ) {
+        if (firstName == null || firstName.isBlank()) {
+            throw new InvalidCsvFieldException("First name is required");
+        }
+
+        if (lastName == null || lastName.isBlank()) {
+            throw new InvalidCsvFieldException("Last name is required");
+        }
+
+        if (email == null || email.isBlank()) {
+            throw new InvalidCsvFieldException("Email is required");
         }
     }
 

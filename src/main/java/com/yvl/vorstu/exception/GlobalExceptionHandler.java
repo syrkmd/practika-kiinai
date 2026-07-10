@@ -1,6 +1,7 @@
 package com.yvl.vorstu.exception;
 
 import com.yvl.vorstu.exception.dto.ApiError;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -131,9 +132,27 @@ public class GlobalExceptionHandler {
         return new ApiError("VALIDATION_ERROR", message);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidCsvHeaderException.class)
+    public ApiError handleInvalidCsvHeader(InvalidCsvHeaderException exception) {
+        return new ApiError("INVALID_CSV_HEADER", exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidCsvFieldException.class)
+    public ApiError handleInvalidCsvField(InvalidCsvFieldException exception) {
+        return new ApiError("INVALID_CSV_FIELD", exception.getMessage());
+    }
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(EmailSendingException.class)
     public ApiError handleEmailSending(EmailSendingException exception) {
         return new ApiError("EMAIL_SENDING_ERROR", exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ApiError handleDataIntegrityViolation(DataIntegrityViolationException exception) {
+        return new ApiError("DATA_INTEGRITY_VIOLATION", "A record with the same unique value already exists");
     }
 }

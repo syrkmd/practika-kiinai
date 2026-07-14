@@ -22,7 +22,7 @@ public class OutboxEventProcessor {
     private static final long MAX_BACKOFF_SECONDS = 3600;
 
     private final OutboxRepository repository;
-    private final EmailService emailService;
+    private final RegistrationInvitationEmailDispatcher registrationInvitationEmailDispatcher;
     private final ObjectMapper objectMapper;
 
     @Value("${app.outbox.max-attempts:5}")
@@ -31,11 +31,6 @@ public class OutboxEventProcessor {
     @Value("${app.outbox.retry-base-delay-seconds:60}")
     private long retryBaseDelaySeconds;
 
-    /**
-     * Claims and processes a single PENDING event in one transaction, so the
-     * FOR UPDATE SKIP LOCKED lock is held for the whole claim-process-commit
-     * cycle. Returns false when there was nothing left to claim.
-     */
     @Transactional
     public boolean processNext() {
         List<OutboxEvent> claimed = repository.findBatchForProcessing(Instant.now(), 1);
@@ -44,7 +39,7 @@ public class OutboxEventProcessor {
             return false;
         }
 
-        handle(claimed.get(0));
+        handle(claimed.getFirst());
         return true;
     }
 
@@ -67,10 +62,9 @@ public class OutboxEventProcessor {
     }
 
     private void sendRegistrationInvitationEmail(OutboxEvent event) {
-        RegistrationInvitationEmailPayload payload =
-                objectMapper.readValue(event.getPayload(), RegistrationInvitationEmailPayload.class);
+        RegistrationInvitationEmailPayload payload = objectMapper.readValue(event.getPayload(), RegistrationInvitationEmailPayload.class);
 
-        emailService.sendInvitation(payload.getEmail(), payload.getToken());
+        registrationInvitationEmailDispatcher.dispatch(payload);
     }
 
     private void markSent(OutboxEvent event) {

@@ -2,11 +2,13 @@ package com.yvl.vorstu.services;
 
 import com.yvl.vorstu.dto.registrationInvitation.InvitationEmailDto;
 import com.yvl.vorstu.dto.registrationInvitation.RegistrationInvitationEmailPayload;
+import com.yvl.vorstu.dto.registrationInvitation.response.RegistrationInvitationSummaryResponse;
 import com.yvl.vorstu.entities.OutboxEventType;
 import com.yvl.vorstu.entities.RegistrationInvitation;
 import com.yvl.vorstu.entities.Role;
 import com.yvl.vorstu.entities.StudentGroup;
 import com.yvl.vorstu.exception.*;
+import com.yvl.vorstu.mapper.RegistrationInvitationMapper;
 import com.yvl.vorstu.repositories.RegistrationInvitationRepository;
 import com.yvl.vorstu.repositories.UserRepository;
 import com.yvl.vorstu.security.hash.HashService;
@@ -15,6 +17,8 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.csv.DuplicateHeaderMode;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,6 +45,12 @@ public class RegistrationInvitationService {
     private final HashService hashService;
     private final EmailValidationService emailValidationService;
     private final OutboxService outboxService;
+    private final RegistrationInvitationMapper mapper;
+
+    public Page<RegistrationInvitationSummaryResponse> getInvitations(Pageable pageable) {
+        return repository.findAll(pageable)
+                .map(mapper::toResponse);
+    }
 
     @Transactional
     public void upload(MultipartFile file) {
